@@ -32,7 +32,7 @@ static void	handle_ptr_opts(t_arg *arg, char *buf, unsigned int i)
 
 void	handle_ptr(t_arg *arg)
 {
-	const char			hex[] = "0123456789abcdef";
+	const char			hex[] = "0123456789ABCDEF";
 	char				*buf;
 	size_t				i;
 
