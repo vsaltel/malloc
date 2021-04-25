@@ -19,8 +19,12 @@ SRCDIR	=	srcs
 INCDIR	=	includes
 OBJDIR	=	objs
 
-FILES	=	malloc.c	\
-			free.c		\
+FILES	=	malloc.c			\
+			realloc.c			\
+			malloc_utils.c		\
+			area.c				\
+			memory.c			\
+			free.c				\
 			show_alloc_mem.c
 
 SRCS	=	$(addprefix $(SRCDIR)/, $(FILES))

@@ -1,47 +1,68 @@
 #include "malloc.h"
 
-static t_mem	*search_mem(void *ptr)
+static int	free_mem(t_area *area, t_mem *mem)
 {
+	int		ret;
+	t_mem	*tmp;
+
+	ret = 0;
+	if (area->lst == mem)
+		area->lst = mem->next;
+	else
+	{
+		tmp = area->lst;
+		while (tmp)
+		{
+			if (tmp->next && tmp->next == mem)
+			{
+				tmp->next = mem->next;
+				break ;
+			}
+			tmp = tmp->next;
+		}
+	}
+	mem->state = 0;
+	if (area->lst == NULL)
+	{
+		printf("munmap area %p\n", area->ptr);
+		ret = munmap(area->ptr, area->len);
+		area->type = empty;
+	}
+	return (ret);
+}
+
+static int	search_mem(void *ptr)
+{
+	t_area	*area;
+	t_mem	*mem;
 	size_t	n;
 
+	area = g_malloc.area;
 	n = 0;
-	while (n < MAX_TINY)
+	while (n < NB_AREA)
 	{
-		if (g_malloc.tiny[n].state && g_malloc.tiny[n].begin == ptr)
-			return (&g_malloc.tiny[n]);
+		mem = get_mem_in_lst(ptr, area[n].lst);
+		if (mem)
+			return (free_mem(area, mem));
 		n++;
 	}
-	n = 0;
-	while (n < MAX_SMALL)
-	{
-		if (g_malloc.small[n].state && g_malloc.small[n].begin == ptr)
-			return (&g_malloc.small[n]);
-		n++;
-	}
-	n = 0;
-	while (n < MAX_LARGE)
-	{
-		if (g_malloc.large[n].state && g_malloc.large[n].begin == ptr)
-			return (&g_malloc.large[n]);
-		n++;
-	}
-	return (NULL);
+	return (1);
 }
 
 void	free(void *ptr)
 {
-	t_mem	*mem;
 	int		ret;
 
-	mem = search_mem(ptr);
-	if (!mem)
+	printf("|||\nfree search %p\n", ptr);
+	if (!ptr)
+		return ;
+	ret = search_mem(ptr);
+	if (ret == 1)
 	{
-		printf("free fail %p\n", ptr);
+		printf("free fail : not find %p\n", ptr);
 		return ;
 	}
-	ret = munmap(mem->begin, mem->len);
-	mem->state = 0;
-	if (ret)
-		printf("free fail %p\n", ptr);
-	printf("free work %p\n", ptr);
+	else if (ret)
+		printf("free fail : munmap fail %p\n", ptr);
+	printf("|||\n");
 }

@@ -41,22 +41,28 @@ static void print_nbr(size_t n)
 	}
 }
 
-static void	print_mem_list(t_mem *mem, size_t max_alloc, unsigned long *total_size)
+static void	print_mem_list(t_area *area, t_type type, unsigned long *total_size)
 {
 	size_t	n;
+	t_mem	*mem;
 
 	n = 0;
-	while (n < max_alloc)
+	while (n < NB_AREA)
 	{
-		if (mem[n].state)
+		if (area[n].type == type)
 		{
-			print_ptr(mem[n].begin);
-			print_str(" - ");
-			print_ptr(mem[n].end);
-			print_str(" : ");
-			print_nbr(mem[n].len);
-			write(1, "\n", 1);
-			*total_size += (unsigned long)(mem[n].len);
+			mem = area[n].lst;
+			while (mem)
+			{
+				print_ptr(mem->begin);
+				print_str(" - ");
+				print_ptr(mem->end);
+				print_str(" : ");
+				print_nbr(mem->len);
+				write(1, "\n", 1);
+				*total_size += (unsigned long)(mem[n].len);
+				mem = mem->next;
+			}
 		}
 		n++;
 	}
@@ -72,15 +78,15 @@ void	show_alloc_mem(void)
 		print_str("TINY : ");
 		print_ptr((void *)ADDR_TINY);
 		write(1, "\n", 1);
-		print_mem_list(g_malloc.tiny, MAX_TINY, &total_size);
+		print_mem_list(g_malloc.area, tiny, &total_size);
 		print_str("SMALL : ");
 		print_ptr((void *)ADDR_SMALL);
 		write(1, "\n", 1);
-		print_mem_list(g_malloc.small, MAX_SMALL, &total_size);
+		print_mem_list(g_malloc.area, small, &total_size);
 		print_str("LARGE : ");
 		print_ptr((void *)ADDR_LARGE);
 		write(1, "\n", 1);
-		print_mem_list(g_malloc.large, MAX_LARGE, &total_size);
+		print_mem_list(g_malloc.area, large, &total_size);
 	}
 	print_str("Total : ");
 	print_nbr(total_size);
