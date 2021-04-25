@@ -5,6 +5,7 @@ static int	free_mem(t_area *area, t_mem *mem)
 	int		ret;
 	t_mem	*tmp;
 
+	lala = 2
 	ret = 0;
 	if (area->lst == mem)
 		area->lst = mem->next;
@@ -41,9 +42,12 @@ static int	search_mem(void *ptr)
 	n = 0;
 	while (n < NB_AREA)
 	{
-		mem = get_mem_in_lst(ptr, area[n].lst);
-		if (mem)
-			return (free_mem(area, mem));
+		if (area[n].type != empty)
+		{
+			mem = get_mem_in_lst(ptr, area[n].lst);
+			if (mem)
+				return (free_mem(area + n, mem));
+		}
 		n++;
 	}
 	return (1);
@@ -53,7 +57,6 @@ void	free(void *ptr)
 {
 	int		ret;
 
-	printf("|||\nfree search %p\n", ptr);
 	if (!ptr)
 		return ;
 	ret = search_mem(ptr);
@@ -64,5 +67,4 @@ void	free(void *ptr)
 	}
 	else if (ret)
 		printf("free fail : munmap fail %p\n", ptr);
-	printf("|||\n");
 }

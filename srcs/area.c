@@ -38,7 +38,7 @@ void	*area_alloc(t_area *area, size_t size)
 	else if (size <= g_malloc.page_size)
 		block_size = g_malloc.page_size;
 	else
-		block_size = ((size % g_malloc.page_size) + 1) * g_malloc.page_size;
+		block_size = ((size / g_malloc.page_size) + 1) * g_malloc.page_size;
 	area->ptr = mmap(get_addr_area(area->type), block_size,
 		PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, 0, 0);
 	if (area->ptr == MAP_FAILED)

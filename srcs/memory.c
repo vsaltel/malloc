@@ -5,10 +5,7 @@ t_mem	*get_mem_in_lst(void *ptr, t_mem *mem)
 	while (mem)
 	{
 		if (ptr >= mem->begin && ptr <= mem->end)
-		{
-			printf("ptr %p mem %p\n", ptr, mem);
 			return (mem);
-		}
 		mem = mem->next;
 	}
 	return (NULL);
@@ -16,7 +13,7 @@ t_mem	*get_mem_in_lst(void *ptr, t_mem *mem)
 
 t_mem	*get_empty_mem(t_mem *mem)
 {
-	size_t			n;	
+	size_t	n;	
 
 	n = 0;
 	while (n < AREA_MAX_ALLOC)

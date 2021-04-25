@@ -60,7 +60,7 @@ static void	print_mem_list(t_area *area, t_type type, unsigned long *total_size)
 				print_str(" : ");
 				print_nbr(mem->len);
 				write(1, "\n", 1);
-				*total_size += (unsigned long)(mem[n].len);
+				*total_size += (unsigned long)(mem->len);
 				mem = mem->next;
 			}
 		}
