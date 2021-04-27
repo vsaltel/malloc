@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 15:00:51 by vsaltel           #+#    #+#             */
-/*   Updated: 2021/04/27 16:50:53 by vsaltel          ###   ########.fr       */
+/*   Updated: 2021/04/27 17:48:15 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	hex_print(unsigned char *ptr)
 
 static void	hex_dump_mem(t_mem *mem)
 {
-	const char	hex[] = "0123456789ABCDEF";
+	const char		hex[] = "0123456789ABCDEF";
 	unsigned char	*ptr;
 	unsigned char	block;
 	char			buf[2];
@@ -31,7 +31,8 @@ static void	hex_dump_mem(t_mem *mem)
 	while (ptr < (unsigned char *)mem->end)
 	{
 		block = *ptr;
-		if (ptr != mem->begin && (size_t)(ptr - (unsigned char *)mem->begin) % 16 == 0)
+		if (ptr != mem->begin &&
+			(size_t)(ptr - (unsigned char *)mem->begin) % 16 == 0)
 			hex_print(ptr);
 		else if (ptr != (unsigned char *)mem->begin)
 			write(1, " ", 1);
