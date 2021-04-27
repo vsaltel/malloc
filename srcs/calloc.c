@@ -1,18 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   malloc.c                                           :+:      :+:    :+:   */
+/*   calloc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/27 14:34:45 by vsaltel           #+#    #+#             */
-/*   Updated: 2021/04/27 14:50:49 by vsaltel          ###   ########.fr       */
+/*   Created: 2021/04/27 14:34:17 by vsaltel           #+#    #+#             */
+/*   Updated: 2021/04/27 14:48:06 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
-
-t_malloc	g_malloc;
 
 static void	*alloc_new_area(size_t size, t_type type)
 {
@@ -27,6 +25,7 @@ static void	*alloc_new_area(size_t size, t_type type)
 		return (NULL);
 	if (!set_mem_in_area(area, mem, size))
 		return (NULL);
+	ft_bzero(mem->begin, size);
 	return (mem->begin);
 }
 
@@ -41,13 +40,15 @@ static void	*alloc_in_area(size_t size, t_type type)
 	mem = get_empty_mem(area->mem);
 	if (!mem || !set_mem_in_area(area, mem, size))
 		return (alloc_new_area(size, type));
+	ft_bzero(mem->begin, size);
 	return (mem->begin);
 }
 
-void	*malloc(size_t size)
+void	*calloc(size_t count, size_t size)
 {
 	if (!g_malloc.init)
 		malloc_init();
+	size = size * count;
 	if (size > g_malloc.data_limit)
 		return (NULL);
 	if (size > g_malloc.page_size * 3)

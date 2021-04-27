@@ -1,3 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   malloc.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/27 14:33:51 by vsaltel           #+#    #+#             */
+/*   Updated: 2021/04/27 15:49:49 by vsaltel          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #ifndef MALLOC_H
 # define MALLOC_H
 
@@ -61,7 +74,19 @@ void	*malloc(size_t size);
 ** srcs/realloc.c
 */
 
+void	*calloc(size_t count, size_t size);
+
+/*
+** srcs/realloc.c
+*/
+
 void	*realloc(void *ptr, size_t size);
+
+/*
+** srcs/realloc.c
+*/
+
+void	*reallocf(void *ptr, size_t size);
 
 /*
 ** srcs/free.c
@@ -74,6 +99,13 @@ void	free(void *ptr);
 */
 
 void	show_alloc_mem(void);
+
+/*
+** srcs/show_alloc_mem_ex.c
+*/
+
+void	show_alloc_mem_ex(void);
+
 
 /*
 ** srcs/malloc_utils.c
@@ -97,5 +129,13 @@ void	*get_addr_area(t_type type);
 void	*area_alloc(t_area *area, size_t size);
 t_area	*get_area(t_area *area, t_type type);
 t_area	*area_init(t_type type, size_t size);
+
+/*
+**	srcs/print.c
+*/
+
+void	print_ptr(void *ptr);
+void	print_str(char *str);
+void	print_nbr(size_t n);
 
 #endif

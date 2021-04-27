@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   realloc.c                                          :+:      :+:    :+:   */
+/*   reallocf.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/27 14:34:56 by vsaltel           #+#    #+#             */
-/*   Updated: 2021/04/27 14:34:57 by vsaltel          ###   ########.fr       */
+/*   Created: 2021/04/27 14:35:03 by vsaltel           #+#    #+#             */
+/*   Updated: 2021/04/27 14:35:06 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,11 @@ static void	*adjust_mem(t_area *area, t_mem *mem, size_t size)
 	}
 	if (ret)
 		return (ret);
+	free(mem->begin);
 	return (NULL);
 }
 
-void	*realloc(void *ptr, size_t size)
+void	*reallocf(void *ptr, size_t size)
 {
 	t_area	*area;
 	t_mem	*mem;

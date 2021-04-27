@@ -20,12 +20,16 @@ INCDIR	=	includes
 OBJDIR	=	objs
 
 FILES	=	malloc.c			\
+			calloc.c			\
 			realloc.c			\
+			reallocf.c			\
 			malloc_utils.c		\
 			area.c				\
 			memory.c			\
 			free.c				\
-			show_alloc_mem.c
+			print.c				\
+			show_alloc_mem.c	\
+			show_alloc_mem_ex.c
 
 SRCS	=	$(addprefix $(SRCDIR)/, $(FILES))
 OBJS	=	$(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)

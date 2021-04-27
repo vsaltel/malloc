@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   area.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/27 14:34:30 by vsaltel           #+#    #+#             */
+/*   Updated: 2021/04/27 14:56:22 by vsaltel          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "malloc.h"
 
 void	*get_addr_area(t_type type)
@@ -15,7 +27,7 @@ void	*get_addr_area(t_type type)
 
 t_area	*get_area(t_area *area, t_type type)
 {
-	size_t			n;	
+	size_t			n;
 
 	n = 0;
 	while (n < NB_AREA)
@@ -44,8 +56,7 @@ void	*area_alloc(t_area *area, size_t size)
 	if (area->ptr == MAP_FAILED)
 		return (NULL);
 	area->len = block_size;
-	printf("area alloc %p %zu\n", area->ptr, area->len);
-	return (area->ptr);	
+	return (area->ptr);
 }
 
 t_area	*area_init(t_type type, size_t size)

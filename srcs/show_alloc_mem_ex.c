@@ -1,16 +1,57 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   show_alloc_mem.c                                   :+:      :+:    :+:   */
+/*   show_alloc_mem_ex.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/27 14:35:10 by vsaltel           #+#    #+#             */
-/*   Updated: 2021/04/27 15:00:26 by vsaltel          ###   ########.fr       */
+/*   Created: 2021/04/27 15:00:51 by vsaltel           #+#    #+#             */
+/*   Updated: 2021/04/27 16:50:53 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
+
+static void	hex_print(unsigned char *ptr)
+{
+	write(1, "\n\t", 2);
+	print_ptr(ptr);
+	write(1, " ", 1);
+}
+
+static void	hex_dump_mem(t_mem *mem)
+{
+	const char	hex[] = "0123456789ABCDEF";
+	unsigned char	*ptr;
+	unsigned char	block;
+	char			buf[2];
+
+	ptr = (unsigned char *)mem->begin;
+	hex_print(ptr);
+	while (ptr < (unsigned char *)mem->end)
+	{
+		block = *ptr;
+		if (ptr != mem->begin && (size_t)(ptr - (unsigned char *)mem->begin) % 16 == 0)
+			hex_print(ptr);
+		else if (ptr != (unsigned char *)mem->begin)
+			write(1, " ", 1);
+		buf[0] = hex[(block / 16) % 16];
+		buf[1] = hex[block % 16];
+		write(1, buf, 2);
+		ptr += 1;
+	}
+	write(1, "\n", 1);
+}
+
+static void	print_mem(t_mem *mem)
+{
+	print_ptr(mem->begin);
+	print_str(" - ");
+	print_ptr(mem->end);
+	print_str(" : ");
+	print_nbr(mem->len);
+	hex_dump_mem(mem);
+}
 
 static void	print_mem_list(t_area *area, t_type type, unsigned long *total_size)
 {
@@ -25,12 +66,7 @@ static void	print_mem_list(t_area *area, t_type type, unsigned long *total_size)
 			mem = area[n].lst;
 			while (mem)
 			{
-				print_ptr(mem->begin);
-				print_str(" - ");
-				print_ptr(mem->end);
-				print_str(" : ");
-				print_nbr(mem->len);
-				write(1, "\n", 1);
+				print_mem(mem);
 				*total_size += (unsigned long)(mem->len);
 				mem = mem->next;
 			}
@@ -39,7 +75,7 @@ static void	print_mem_list(t_area *area, t_type type, unsigned long *total_size)
 	}
 }
 
-void	show_alloc_mem(void)
+void	show_alloc_mem_ex(void)
 {
 	unsigned long	total_size;
 

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   memory.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/27 14:34:53 by vsaltel           #+#    #+#             */
+/*   Updated: 2021/04/27 14:47:21 by vsaltel          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "malloc.h"
 
 t_mem	*get_mem_in_lst(void *ptr, t_mem *mem)
@@ -13,7 +25,7 @@ t_mem	*get_mem_in_lst(void *ptr, t_mem *mem)
 
 t_mem	*get_empty_mem(t_mem *mem)
 {
-	size_t	n;	
+	size_t	n;
 
 	n = 0;
 	while (n < AREA_MAX_ALLOC)
@@ -55,16 +67,19 @@ t_mem	*set_mem_in_area(t_area *area, t_mem *mem, size_t size)
 	tmp = area->lst;
 	if (!tmp && (size_t)(area->ptr + area->len) >= size)
 		return (set_mem(area, mem, size, NULL));
-	else if (tmp && tmp->begin != area->ptr && (size_t)(tmp->begin - area->ptr) >= size)
+	else if (tmp && tmp->begin != area->ptr &&
+		(size_t)(tmp->begin - area->ptr) >= size)
 	{
 		mem->next = tmp;
 		return (set_mem(area, mem, size, NULL));
 	}
 	while (tmp)
 	{
-		if (!tmp->next && (size_t)((area->ptr + area->len) - (tmp->end + 1)) >= size)
+		if (!tmp->next &&
+			(size_t)((area->ptr + area->len) - (tmp->end + 1)) >= size)
 			return (set_mem(area, mem, size, tmp));
-		else if (tmp->next && (size_t)(tmp->next->begin - (tmp->end + 1)) >= size)
+		else if (tmp->next &&
+			(size_t)(tmp->next->begin - (tmp->end + 1)) >= size)
 			return (set_mem(area, mem, size, tmp));
 		tmp = tmp->next;
 	}

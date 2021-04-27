@@ -1,11 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/27 14:34:39 by vsaltel           #+#    #+#             */
+/*   Updated: 2021/04/27 14:54:22 by vsaltel          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "malloc.h"
+
+static int	free_area(t_area *area)
+{
+	int		ret;
+
+	ret = munmap(area->ptr, area->len);
+	area->type = empty;
+	return (ret);
+}
 
 static int	free_mem(t_area *area, t_mem *mem)
 {
 	int		ret;
 	t_mem	*tmp;
 
-	lala = 2
 	ret = 0;
 	if (area->lst == mem)
 		area->lst = mem->next;
@@ -24,20 +44,18 @@ static int	free_mem(t_area *area, t_mem *mem)
 	}
 	mem->state = 0;
 	if (area->lst == NULL)
-	{
-		printf("munmap area %p\n", area->ptr);
-		ret = munmap(area->ptr, area->len);
-		area->type = empty;
-	}
+		ret = free_area(area);
 	return (ret);
 }
 
-static int	search_mem(void *ptr)
+void	free(void *ptr)
 {
 	t_area	*area;
 	t_mem	*mem;
 	size_t	n;
 
+	if (!ptr)
+		return ;
 	area = g_malloc.area;
 	n = 0;
 	while (n < NB_AREA)
@@ -46,25 +64,11 @@ static int	search_mem(void *ptr)
 		{
 			mem = get_mem_in_lst(ptr, area[n].lst);
 			if (mem)
-				return (free_mem(area + n, mem));
+			{
+				free_mem(area + n, mem);
+				return ;
+			}
 		}
 		n++;
 	}
-	return (1);
-}
-
-void	free(void *ptr)
-{
-	int		ret;
-
-	if (!ptr)
-		return ;
-	ret = search_mem(ptr);
-	if (ret == 1)
-	{
-		printf("free fail : not find %p\n", ptr);
-		return ;
-	}
-	else if (ret)
-		printf("free fail : munmap fail %p\n", ptr);
 }
