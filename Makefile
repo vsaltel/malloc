@@ -23,7 +23,6 @@ FILES	=	malloc.c			\
 			calloc.c			\
 			realloc.c			\
 			reallocf.c			\
-			malloc_utils.c		\
 			area.c				\
 			memory.c			\
 			free.c				\

@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 14:35:03 by vsaltel           #+#    #+#             */
-/*   Updated: 2021/04/27 14:35:06 by vsaltel          ###   ########.fr       */
+/*   Updated: 2021/04/29 16:56:02 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,11 @@
 
 static void	*get_mem_longer(t_area *area, t_mem *mem, size_t size)
 {
-	if ((!mem->next && mem->begin + size <= area->ptr + area->len) ||
-		(mem->next && mem->begin + size <= mem->next->begin))
+	if ((!mem->next && mem + sizeof(t_mem) + size <= area->ptr + (area->len - sizeof(t_area))) ||
+		(mem->next && mem + sizeof(t_mem) + size <= mem->next + sizeof(t_mem)))
 	{
-		mem->end = mem->begin + size;
-		mem->len = size;
-		return (mem->begin);
+		mem->len = size + sizeof(t_mem);
+		return (mem + sizeof(t_mem));
 	}
 	return (NULL);
 }
@@ -31,8 +30,7 @@ static void	*new_alloc(t_mem *mem, size_t size)
 	ret = malloc(size);
 	if (ret)
 	{
-		ft_memcpy(ret, mem->begin, mem->len);
-		free(mem->begin);
+		ft_memcpy(ret, mem + sizeof(t_mem), mem->len - sizeof(t_mem));
 		return (ret);
 	}
 	return (NULL);
@@ -43,38 +41,34 @@ static void	*adjust_mem(t_area *area, t_mem *mem, size_t size)
 	t_mem	*ret;
 
 	if (!size)
-		ret = new_alloc(mem, mem->len);
+		ret = new_alloc(mem, mem->len - sizeof(t_mem));
 	else
 	{
 		ret = get_mem_longer(area, mem, size);
 		if (!ret)
 			ret = new_alloc(mem, size);
 	}
-	if (ret)
-		return (ret);
-	free(mem->begin);
-	return (NULL);
+	free(mem);
+	return (ret);
 }
 
 void	*reallocf(void *ptr, size_t size)
 {
 	t_area	*area;
 	t_mem	*mem;
-	size_t	n;
 
 	if (!ptr)
 		return (malloc(size));
-	area = g_malloc.area;
-	n = 0;
-	while (n < NB_AREA)
+	area = g_area;
+	while (area)
 	{
-		if (area[n].type != empty)
+		if (area->type != empty)
 		{
-			mem = get_mem_in_lst(ptr, area[n].lst);
+			mem = get_mem_in_lst(ptr, area->mem);
 			if (mem)
-				return (adjust_mem(area + n, mem, size));
+				return (adjust_mem(area, mem, size));
 		}
-		n++;
+		area = area->next;
 	}
 	return (NULL);
 }

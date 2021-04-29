@@ -16,15 +16,11 @@ void	fill(char *ptr, int size)
 
 int	main(void)
 {
-	//char	*ptr[10];
-	uint8_t	*t;
+	void	*ptr[10];
 
-	t = calloc(sizeof(uint8_t), 2);
-	t[0] = 256;
-	t[1] = 256;
-	//fill(ptr[0], 103);
-	show_alloc_mem_ex();
-	printf("%d %d\n", t[0], t[1]);
-	free(t);
+	ptr[0] = malloc(100);
+	printf("%p\n", ptr[0]);
+	show_alloc_mem();
+	free(ptr[0]);
 	return (0);
 }

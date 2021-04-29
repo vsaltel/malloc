@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 14:34:39 by vsaltel           #+#    #+#             */
-/*   Updated: 2021/04/27 14:54:22 by vsaltel          ###   ########.fr       */
+/*   Updated: 2021/04/29 17:40:07 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,21 @@ static int	free_area(t_area *area)
 {
 	int		ret;
 
-	ret = munmap(area->ptr, area->len);
-	area->type = empty;
+	ret = munmap(area, area->len);
 	return (ret);
 }
 
-static int	free_mem(t_area *area, t_mem *mem)
+static int	free_mem(t_area *area, t_mem *mem, t_area *bef)
 {
 	int		ret;
 	t_mem	*tmp;
 
 	ret = 0;
-	if (area->lst == mem)
-		area->lst = mem->next;
+	if (area->mem == mem)
+		area->mem = mem->next;
 	else
 	{
-		tmp = area->lst;
+		tmp = area->mem;
 		while (tmp)
 		{
 			if (tmp->next && tmp->next == mem)
@@ -42,33 +41,37 @@ static int	free_mem(t_area *area, t_mem *mem)
 			tmp = tmp->next;
 		}
 	}
-	mem->state = 0;
-	if (area->lst == NULL)
+	if (area->mem == NULL)
+	{
+		if (bef)
+			bef->next = area->next;
 		ret = free_area(area);
+	}
 	return (ret);
 }
 
 void	free(void *ptr)
 {
 	t_area	*area;
+	t_area	*bef;
 	t_mem	*mem;
-	size_t	n;
 
 	if (!ptr)
 		return ;
-	area = g_malloc.area;
-	n = 0;
-	while (n < NB_AREA)
+	area = g_area;
+	bef = NULL;
+	while (area)
 	{
-		if (area[n].type != empty)
+		if (area->type != empty)
 		{
-			mem = get_mem_in_lst(ptr, area[n].lst);
+			mem = get_mem_in_lst(ptr, area->mem);
 			if (mem)
 			{
-				free_mem(area + n, mem);
+				free_mem(area, mem, bef);
 				return ;
 			}
 		}
-		n++;
+		bef = area;
+		area = area->next;
 	}
 }
