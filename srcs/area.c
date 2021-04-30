@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 14:34:30 by vsaltel           #+#    #+#             */
-/*   Updated: 2021/04/29 17:37:58 by vsaltel          ###   ########.fr       */
+/*   Updated: 2021/04/30 17:11:13 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,18 @@ t_area	*get_area(t_area *area, size_t size)
 t_area	*area_init(size_t size, t_type type)
 {
 	t_area		*area;
+	size_t		page_size;
 	
+	page_size = (size_t)getpagesize();
+	if (size + sizeof(t_area) <= page_size)
+		size = page_size;
+	else
+		size = ((size / page_size) + 1) * page_size;
 	area = mmap(get_addr_area(type), size,
 		PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, 0, 0);
-	if (area->ptr == MAP_FAILED)
+	if (area == MAP_FAILED)
 		return (NULL);
-	area->ptr = (t_mem *)(area + sizeof(t_area));
+	area->ptr = (char *)(area + 1);
 	area->len = size;
 	area->type = type;
 	area->mem = NULL;

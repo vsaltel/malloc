@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 15:00:51 by vsaltel           #+#    #+#             */
-/*   Updated: 2021/04/29 17:50:30 by vsaltel          ###   ########.fr       */
+/*   Updated: 2021/04/30 14:49:33 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	print_mem(t_mem *mem)
 	print_str(" - ");
 	print_ptr(mem + mem->len);
 	print_str(" : ");
-	print_nbr(mem->len);
+	print_nbr(mem->len - sizeof(t_mem));
 	hex_dump_mem(mem);
 }
 
@@ -66,7 +66,7 @@ static void	print_mem_list(t_area *area, t_type type, unsigned long *total_size)
 			while (mem)
 			{
 				print_mem(mem);
-				*total_size += (unsigned long)(mem->len);
+				*total_size += (unsigned long)(mem->len - sizeof(t_mem));
 				mem = mem->next;
 			}
 		}

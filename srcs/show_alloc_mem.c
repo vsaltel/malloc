@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 14:35:10 by vsaltel           #+#    #+#             */
-/*   Updated: 2021/04/29 17:48:00 by vsaltel          ###   ########.fr       */
+/*   Updated: 2021/04/30 16:36:08 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ static void	print_mem_list(t_area *area, t_type type, unsigned long *total_size)
 			mem = area->mem;
 			while (mem)
 			{
-				print_ptr(mem + sizeof(t_mem));
+				print_ptr((char *)mem + sizeof(t_mem));
 				print_str(" - ");
-				print_ptr(mem + mem->len);
+				print_ptr((char *)mem + mem->len);
 				print_str(" : ");
-				print_nbr(mem->len);
+				print_nbr(mem->len - sizeof(t_mem));
 				write(1, "\n", 1);
-				*total_size += (unsigned long)(mem->len);
+				*total_size += (unsigned long)(mem->len - sizeof(t_mem));
 				mem = mem->next;
 			}
 		}

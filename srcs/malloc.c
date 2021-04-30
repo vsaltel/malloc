@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 14:34:45 by vsaltel           #+#    #+#             */
-/*   Updated: 2021/04/29 17:54:33 by vsaltel          ###   ########.fr       */
+/*   Updated: 2021/04/30 16:48:08 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ static t_mem	*alloc_new_area(size_t size, t_type type)
 {
 	t_area	*area;
 
-	printf("there\n");
 	area = area_init(size, type);
 	if (!area)
 		return (NULL);
@@ -42,20 +41,14 @@ static t_mem	*alloc_in_area(t_area *beg, size_t size, t_type type)
 void	*malloc(size_t size)
 {
 	struct rlimit	rlp;
-	size_t			page_size;
 	t_mem			*ret;
 
 	getrlimit(RLIMIT_DATA, &rlp);
-	page_size = (size_t)getpagesize();
 	size = size + sizeof(t_mem);
-	if (size <= page_size)
-		size = page_size;
-	else
-		size = ((size / page_size) + 1) * page_size;
 	if (size >= rlp.rlim_cur)
 		return (NULL);
 	ret = alloc_in_area(g_area, size, get_type_area(size));
 	if (ret)
-		return ((void *)(ret + sizeof(t_mem)));
+		return ((char *)ret + sizeof(t_mem));
 	return (NULL);
 }

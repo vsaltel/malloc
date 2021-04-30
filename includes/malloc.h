@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 14:33:51 by vsaltel           #+#    #+#             */
-/*   Updated: 2021/04/29 17:38:38 by vsaltel          ###   ########.fr       */
+/*   Updated: 2021/04/30 16:57:55 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ typedef struct s_mem
 typedef struct s_area
 {
 	t_type	type;
-	t_mem	*ptr;
+	char	*ptr;
 	size_t	len;
 	t_mem	*mem;
 	struct s_area	*next;
