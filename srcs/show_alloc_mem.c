@@ -25,7 +25,7 @@ static void	print_mem_list(t_area *area, t_type type, unsigned long *total_size)
 			{
 				print_ptr((char *)mem + sizeof(t_mem));
 				print_str(" - ");
-				print_ptr((char *)mem + mem->len);
+				print_ptr((char *)mem + mem->len - 1);
 				print_str(" : ");
 				print_nbr(mem->len - sizeof(t_mem));
 				write(1, "\n", 1);

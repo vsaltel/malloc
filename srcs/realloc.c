@@ -14,7 +14,10 @@
 
 static void	*get_mem_longer(t_area *area, t_mem *mem, size_t size)
 {
-	if ((!mem->next && mem + sizeof(t_mem) + size <= area->ptr + (area->len - sizeof(t_area))) ||
+	char	*mem_end;
+
+	mem_end = (char *)mem + sizeof(t_mem) + size;
+	if ((!mem->next && mem_end <= area->ptr + (area->len - sizeof(t_area))) || \
 		(mem->next && mem + sizeof(t_mem) + size <= mem->next + sizeof(t_mem)))
 	{
 		mem->len = size + sizeof(t_mem);
@@ -30,7 +33,7 @@ static void	*new_alloc(t_mem *mem, size_t size)
 	ret = malloc(size);
 	if (ret)
 	{
-		ft_memcpy(ret, mem + sizeof(t_mem), mem->len - sizeof(t_mem));
+		ft_memcpy(ret, mem + sizeof(t_mem), size);
 		free(mem);
 		return (ret);
 	}

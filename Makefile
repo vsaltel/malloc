@@ -1,5 +1,5 @@
 CC		=	gcc
-CFLAGS	+=	-Wall -Wextra #-Werror
+CFLAGS	+=	-Wall -Wextra -Werror
 
 ifdef DEBUG
 	CFLAGS += -g3 -fsanitize=address
@@ -14,7 +14,6 @@ SHELL	=	bash
 VALGRIND_ARGS = --leak-check=full --show-leak-kinds=all
 
 NAME 	=	libft_malloc_$(HOSTTYPE).so
-LIBFT	=	libft
 SRCDIR	=	srcs
 INCDIR	=	includes
 OBJDIR	=	objs
@@ -27,6 +26,7 @@ FILES	=	malloc.c			\
 			memory.c			\
 			free.c				\
 			print.c				\
+			utils.c				\
 			show_alloc_mem.c	\
 			show_alloc_mem_ex.c
 
@@ -48,52 +48,36 @@ _PURPLE=\x1b[35m
 _CYAN=\x1b[36m
 _WHITE=\x1b[37m
 
-.PHONY: all clean fclean re norm tests $(LIBFT)
+.PHONY: all clean fclean re norm tests
 
 .SILENT:
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@$(MAKE) -q -C $(LIBFT) || $(MAKE) -j4 -C $(LIBFT)
 	@echo -e -n "\n${_BLUE}${_BOLD}[Create Shared Library] $(NAME)${_END}"
-	@$(CC) $(CFLAGS) -shared -o $(LIBFT)/$(NAME) $(OBJS) -L./$(LIBFT) -lft
+	@$(CC) $(CFLAGS) -shared -o $(NAME) $(OBJS)
 	@echo -e "\n${_GREEN}${_BOLD}$(NAME) done.${_END}"
-	export LD_LIBRARY_PATH=$(PWD)
-	$(CC) $(CFLAGS) main.c -I $(INCDIR) -I $(LIBFT)/$(INCDIR) -o test -L./$(LIBFT) -lft -lft_malloc_$(HOSTTYPE)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c Makefile
 	@mkdir -p $(@D)
 	@echo -n -e "\r\033[K${_PURPLE}${BOLD}[${NAME}] Compiling $<${_END}"
-	@$(CC) $(CFLAGS) -I $(INCDIR) -I $(LIBFT)/$(INCDIR) -MMD -fPIC -o $@ -c $<
-
-libft:
-	@$(MAKE) -q -C $(LIBFT) || $(MAKE) -j4 -C $(LIBFT)
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L./$(LIBFT) -lft -D_GNU_SOURCE
+	@$(CC) $(CFLAGS) -I $(INCDIR) -MMD -fPIC -o $@ -c $<
 
 clean:
-	@$(MAKE) -C $(LIBFT) clean
 	@echo -e "${_RED}${_BOLD}Cleaning obj files...${_END}"
 	@rm -f $(OBJS)
 	@rm -f $(OBJSD)
+	@rm -f test[0-9]*
+	@rm -f mytest
 	@rm -Rf $(OBJDIR)
 
 fclean: clean
-	@$(MAKE) -C $(LIBFT) fclean
 	@echo -e "${_RED}${_BOLD}Cleaning project...${_END}"
-	@rm -f test
-	@rm -f $(LIBFT)/$(NAME)
-	@rm -rf $(OBJDIR)
+	@rm -f $(NAME)
 	@rm -rf $(NAME).dSYM
 
 re: fclean
 	@$(MAKE)
-
-norm:
-	@norminette $(INCDIR) $(SRCDIR) $(LIBFT)/$(INCDIR) $(LIBFT)/$(SRCDIR) | grep "Warning\|Error" || true
-	@echo "Norm done!"
-
-valgrind: all
-	\valgrind $(VALGRIND_ARGS) "./${NAME}"
 
 -include $(OBJSD)

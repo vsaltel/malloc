@@ -13,8 +13,10 @@
 #ifndef MALLOC_H
 # define MALLOC_H
 
-# define NB_AREA 10
-# define AREA_MAX_ALLOC 100
+# ifndef NULL
+#  define NULL __DARWIN_NULL
+# endif
+
 # define MAX_TINY 128
 # define MAX_SMALL 1024
 # define ADDR_TINY 0xA00000000
@@ -22,9 +24,8 @@
 # define ADDR_LARGE 0xC00000000
 
 # include <sys/mman.h>
-# include <stdio.h>
-
-# include "libft.h"
+# include <sys/resource.h>
+# include <unistd.h>
 
 typedef enum e_type
 {
@@ -42,10 +43,10 @@ typedef struct s_mem
 
 typedef struct s_area
 {
-	t_type	type;
-	char	*ptr;
-	size_t	len;
-	t_mem	*mem;
+	t_type			type;
+	char			*ptr;
+	size_t			len;
+	t_mem			*mem;
 	struct s_area	*next;
 }				t_area;
 
@@ -116,5 +117,13 @@ t_type	get_type_area(size_t size);
 void	print_ptr(void *ptr);
 void	print_str(char *str);
 void	print_nbr(size_t n);
+
+/*
+**	srcs/print.c
+*/
+
+size_t	ft_strlen(const char *s);
+char	*ft_strrev(char *s);
+void	*ft_memcpy(void *dst, const void *src, size_t n);
 
 #endif

@@ -1,16 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memcpy.c                                        :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/06 12:23:22 by frossiny          #+#    #+#             */
-/*   Updated: 2018/11/08 16:58:24 by frossiny         ###   ########.fr       */
+/*   Created: 2021/04/27 14:34:30 by vsaltel           #+#    #+#             */
+/*   Updated: 2021/04/30 17:11:13 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "malloc.h"
+
+size_t	ft_strlen(const char *s)
+{
+	int		len;
+	char	*str;
+
+	len = 0;
+	str = (char *)s;
+	if (str == NULL)
+		return (0);
+	while (*str++ != '\0')
+		len++;
+	return (len);
+}
+
+char	*ft_strrev(char *s)
+{
+	int		i;
+	int		len;
+	char	tmp;
+
+	if (!s)
+		return (NULL);
+	len = ft_strlen(s) - 1;
+	i = 0;
+	while (i < len)
+	{
+		tmp = s[len];
+		s[len--] = s[i];
+		s[i++] = tmp;
+	}
+	return (s);
+}
 
 void	*ft_memcpy(void *dst, const void *src, size_t n)
 {

@@ -12,7 +12,7 @@
 
 #include "malloc.h"
 
-static void	hex_print(unsigned char *ptr)
+static void	hex_print(char *ptr)
 {
 	write(1, "\n\t", 2);
 	print_ptr(ptr);
@@ -22,19 +22,19 @@ static void	hex_print(unsigned char *ptr)
 static void	hex_dump_mem(t_mem *mem)
 {
 	const char		hex[] = "0123456789ABCDEF";
-	unsigned char	*ptr;
+	char			*ptr;
 	unsigned char	block;
-	char			buf[2];
+	unsigned char	buf[2];
 
-	ptr = (unsigned char *)mem + mem->len;
+	ptr = (char *)mem + sizeof(t_mem);
 	hex_print(ptr);
-	while (ptr < (unsigned char *)(mem + mem->len))
+	while (ptr < (char *)mem + mem->len)
 	{
 		block = *ptr;
-		if ((t_mem *)ptr != mem + sizeof(t_mem) &&
-			(size_t)(ptr - (unsigned char *)mem + sizeof(t_mem)) % 16 == 0)
+		if (ptr != (char *)mem + sizeof(t_mem) && \
+			(size_t)(ptr - (char *)mem + sizeof(t_mem)) % 16 == 0)
 			hex_print(ptr);
-		else if ((t_mem *)ptr != mem + sizeof(t_mem))
+		else if (ptr != (char *)mem + sizeof(t_mem))
 			write(1, " ", 1);
 		buf[0] = hex[(block / 16) % 16];
 		buf[1] = hex[block % 16];
@@ -46,9 +46,9 @@ static void	hex_dump_mem(t_mem *mem)
 
 static void	print_mem(t_mem *mem)
 {
-	print_ptr(mem + sizeof(t_mem));
+	print_ptr((char *)mem + sizeof(t_mem));
 	print_str(" - ");
-	print_ptr(mem + mem->len);
+	print_ptr((char *)mem + mem->len - 1);
 	print_str(" : ");
 	print_nbr(mem->len - sizeof(t_mem));
 	hex_dump_mem(mem);

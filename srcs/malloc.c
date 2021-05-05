@@ -43,6 +43,8 @@ void	*malloc(size_t size)
 	struct rlimit	rlp;
 	t_mem			*ret;
 
+	if (!size)
+		return (NULL);
 	getrlimit(RLIMIT_DATA, &rlp);
 	size = size + sizeof(t_mem);
 	if (size >= rlp.rlim_cur)

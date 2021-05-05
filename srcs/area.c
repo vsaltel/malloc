@@ -48,25 +48,40 @@ t_area	*get_area(t_area *area, size_t size)
 	return (NULL);
 }
 
+static void	add_to_end(t_area *area)
+{
+	t_area		*tmp;
+
+	if (!g_area)
+		g_area = area;
+	else
+	{
+		tmp = g_area;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = area;
+	}
+}
+
 t_area	*area_init(size_t size, t_type type)
 {
 	t_area		*area;
 	size_t		page_size;
-	
+
 	page_size = (size_t)getpagesize();
 	if (size + sizeof(t_area) <= page_size)
 		size = page_size;
 	else
 		size = ((size / page_size) + 1) * page_size;
 	area = mmap(get_addr_area(type), size,
-		PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, 0, 0);
+			PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, 0, 0);
 	if (area == MAP_FAILED)
 		return (NULL);
 	area->ptr = (char *)(area + 1);
 	area->len = size;
 	area->type = type;
 	area->mem = NULL;
-	area->next = g_area;
-	g_area = area;
+	area->next = NULL;
+	add_to_end(area);
 	return (area);
 }

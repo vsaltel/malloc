@@ -12,20 +12,26 @@
 
 #include "malloc.h"
 
-static int	free_area(t_area *area)
+static int	free_area(t_area *area, t_area *bef)
 {
 	int		ret;
 
-	ret = munmap(area, area->len);
+	ret = 0;
+	if (area->mem == NULL)
+	{
+		if (bef)
+			bef->next = area->next;
+		else
+			g_area = area->next;
+		ret = munmap(area, area->len);
+	}
 	return (ret);
 }
 
 static int	free_mem(t_area *area, t_mem *mem, t_area *bef)
 {
-	int		ret;
 	t_mem	*tmp;
 
-	ret = 0;
 	if (area->mem == mem)
 		area->mem = mem->next;
 	else
@@ -41,13 +47,7 @@ static int	free_mem(t_area *area, t_mem *mem, t_area *bef)
 			tmp = tmp->next;
 		}
 	}
-	if (area->mem == NULL)
-	{
-		if (bef)
-			bef->next = area->next;
-		ret = free_area(area);
-	}
-	return (ret);
+	return (free_area(area, bef));
 }
 
 void	free(void *ptr)

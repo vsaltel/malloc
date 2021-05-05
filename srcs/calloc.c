@@ -39,20 +39,16 @@ static t_mem	*alloc_in_area(t_area *beg, size_t size, t_type type)
 void	*calloc(size_t count, size_t size)
 {
 	struct rlimit	rlp;
-	size_t			page_size;
 	t_mem			*ret;
 
+	if (!size)
+		return (NULL);
 	getrlimit(RLIMIT_DATA, &rlp);
-	page_size = (size_t)getpagesize();
 	size = (size * count) + sizeof(t_mem);
-	if (size <= page_size)
-		size = page_size;
-	else
-		size = ((size / page_size) + 1) * page_size;
 	if (size >= rlp.rlim_cur)
 		return (NULL);
 	ret = alloc_in_area(g_area, size, get_type_area(size));
 	if (ret)
-		return ((void *)(ret + sizeof(t_mem)));
+		return ((char *)ret + sizeof(t_mem));
 	return (NULL);
 }
