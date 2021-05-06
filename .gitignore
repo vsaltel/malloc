@@ -1,7 +1,6 @@
 example
 tags
 objs
-*.sh
 *.swp
 
 # Prerequisites
