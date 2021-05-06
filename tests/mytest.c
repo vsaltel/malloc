@@ -1,5 +1,5 @@
-#include "../includes/malloc.h"
-//#include <stdlib.h>
+//#include "../includes/malloc.h"
+#include <stdlib.h>
 #include <stdio.h>
 
 void	fill(char *ptr, int size)
@@ -15,6 +15,18 @@ void	fill(char *ptr, int size)
 	ptr[size - 1] = '\0';
 }
 
+int	main(void)
+{
+	int	*ptr;
+
+	ptr = calloc(sizeof(int), 4);
+	ptr[0] = 0;
+	ptr[1] = 10;
+	ptr[2] = 20;
+	ptr[3] = 30;
+	printf("%d %d %d %d\n", ptr[0], ptr[1], ptr[2], ptr[3]);
+}
+/*
 int	main(void)
 {
 	char	*ptr[10];
@@ -41,7 +53,7 @@ int	main(void)
 	free(ptr[3]);
 	return (0);
 }
-
+*/
 /*
 int main(void)
 {
@@ -56,6 +68,34 @@ int main(void)
 	//printf("\nhere\n");
 	//printf("%d %d %d %d\n", ptr[0], ptr[1], ptr[2], ptr[3]);
 	free(ptr);
+	return (0);
+}
+*/
+/*
+#include <unistd.h>
+#include <string.h>
+#define M (1024 * 1024)
+
+void print(char *s)
+{
+	write(1, s, strlen(s));
+}
+
+int main()
+{
+	char *addr1;
+	char *addr3;
+
+	print("\n1\n");
+	addr1 = (char*)malloc(16*M);
+	strcpy(addr1, "Bonjours\n");
+	printf("1 %p\n", addr1);
+	print(addr1);
+	print("\n2\n");
+	addr3 = (char*)realloc(addr1, 128*M);
+	addr3[127*M] = 42;
+	printf("2 %p\n", addr3);
+	print(addr3);
 	return (0);
 }
 */

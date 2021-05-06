@@ -12,43 +12,29 @@
 
 #include "malloc.h"
 
-static t_mem	*alloc_new_area(size_t size, t_type type)
+static void	ft_bzero(void *s, size_t n)
 {
-	t_area	*area;
+	char		*str;
 
-	area = area_init(size, type);
-	if (!area)
-		return (NULL);
-	return (set_mem_in_area(area, size));
-}
-
-static t_mem	*alloc_in_area(t_area *beg, size_t size, t_type type)
-{
-	t_area	*area;
-	t_mem	*mem;
-
-	area = get_area(beg, size);
-	if (!area)
-		return (alloc_new_area(size, type));
-	mem = set_mem_in_area(area, size);
-	if (!mem)
-		return (alloc_in_area(area->next, size, type));
-	return (mem);
+	if (n <= 0)
+		return ;
+	str = (char *)s;
+	while (n--)
+		*str++ = '\0';
 }
 
 void	*calloc(size_t count, size_t size)
 {
-	struct rlimit	rlp;
-	t_mem			*ret;
+	size_t	total;
+	void	*ret;
 
-	if (!size)
+	pthread_mutex_lock(&g_mutex);
+	total = count * size;
+	if (!total)
 		return (NULL);
-	getrlimit(RLIMIT_DATA, &rlp);
-	size = (size * count) + sizeof(t_mem);
-	if (size >= rlp.rlim_cur)
-		return (NULL);
-	ret = alloc_in_area(g_area, size, get_type_area(size));
+	ret = malloc_exec(total);
 	if (ret)
-		return ((char *)ret + sizeof(t_mem));
-	return (NULL);
+		ft_bzero(ret, total);
+	pthread_mutex_unlock(&g_mutex);
+	return (ret);
 }

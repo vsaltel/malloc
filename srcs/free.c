@@ -58,7 +58,7 @@ static int	free_mem(t_area *area, t_mem *mem, t_area *bef)
 	return (free_area(area, bef));
 }
 
-void	free(void *ptr)
+void	free_exec(void *ptr)
 {
 	t_area	*area;
 	t_area	*bef;
@@ -82,4 +82,11 @@ void	free(void *ptr)
 		bef = area;
 		area = area->next;
 	}
+}
+
+void	free(void *ptr)
+{
+	pthread_mutex_lock(&g_mutex);
+	free_exec(ptr);
+	pthread_mutex_unlock(&g_mutex);
 }

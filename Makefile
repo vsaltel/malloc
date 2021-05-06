@@ -1,8 +1,8 @@
 CC		=	gcc
-CFLAGS	+=	-Wall -Wextra #-Werror
+CFLAGS	+=	-Wall -Wextra -Werror
 
 ifdef DEBUG
-	CFLAGS += -g3 -fsanitize=address
+CFLAGS	+= -g3 -fsanitize=address
 endif
 
 ifeq ($(HOSTTYPE),)
@@ -20,7 +20,6 @@ INCDIR	=	includes
 OBJDIR	=	objs
 
 FILES	=	malloc.c			\
-			calloc.c			\
 			realloc.c			\
 			reallocf.c			\
 			area.c				\
@@ -29,8 +28,11 @@ FILES	=	malloc.c			\
 			print.c				\
 			utils.c				\
 			show_alloc_mem.c	\
-			show_alloc_mem_ex.c
+			show_alloc_mem_ex.c	
 
+ifdef CALLOC
+FILES	+= calloc.c
+endif
 
 SRCS	=	$(addprefix $(SRCDIR)/, $(FILES))
 OBJS	=	$(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)

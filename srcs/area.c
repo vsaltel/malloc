@@ -76,7 +76,7 @@ t_area	*area_init(size_t size, t_type type)
 	else
 		size = (((MAX_TINY * 100) / page_size) + 1) * page_size;
 	area = mmap(get_addr_area(type), size,
-			PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, 0, 0);
+			PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
 	if (area == MAP_FAILED)
 		return (NULL);
 	area->len = size;

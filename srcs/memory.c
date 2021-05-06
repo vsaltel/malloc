@@ -63,7 +63,7 @@ t_mem	*set_mem_in_area(t_area *area, size_t size)
 	{
 		if (!tmp->next)
 		{
-			area_end = (char *)(area + 1) + area->len - sizeof(t_area);
+			area_end = (char *)area + area->len;
 			if ((size_t)(area_end - ((char *)tmp + tmp->len)) >= size)
 				return (set_mem(area, size, tmp, NULL));
 		}

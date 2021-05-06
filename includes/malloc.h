@@ -26,6 +26,7 @@
 # include <sys/mman.h>
 # include <sys/resource.h>
 # include <unistd.h>
+# include <pthread.h>
 
 typedef enum e_type
 {
@@ -49,12 +50,14 @@ typedef struct s_area
 	struct s_area	*next;
 }				t_area;
 
-extern t_area	*g_area;
+extern t_area			*g_area;
+extern pthread_mutex_t	g_mutex;
 
 /*
 ** srcs/malloc.c
 */
 
+void	*malloc_exec(size_t size);
 void	*malloc(size_t size);
 
 /*
@@ -79,6 +82,7 @@ void	*reallocf(void *ptr, size_t size);
 ** srcs/free.c
 */
 
+void	free_exec(void *ptr);
 void	free(void *ptr);
 
 /*

@@ -12,7 +12,8 @@
 
 #include "malloc.h"
 
-t_area			*g_area;
+t_area			*g_area = NULL;
+pthread_mutex_t	g_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 static t_mem	*alloc_new_area(size_t size, t_type type)
 {
@@ -38,7 +39,7 @@ static t_mem	*alloc_in_area(t_area *beg, size_t size, t_type type)
 	return (mem);
 }
 
-void	*malloc(size_t size)
+void	*malloc_exec(size_t size)
 {
 	struct rlimit	rlp;
 	t_mem			*ret;
@@ -53,4 +54,14 @@ void	*malloc(size_t size)
 	if (ret)
 		return ((char *)ret + sizeof(t_mem));
 	return (NULL);
+}
+
+void	*malloc(size_t size)
+{
+	void	*ret;
+
+	pthread_mutex_lock(&g_mutex);
+	ret = malloc_exec(size);
+	pthread_mutex_unlock(&g_mutex);
+	return (ret);
 }
