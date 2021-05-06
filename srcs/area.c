@@ -69,15 +69,16 @@ t_area	*area_init(size_t size, t_type type)
 	size_t		page_size;
 
 	page_size = (size_t)getpagesize();
-	if (size + sizeof(t_area) <= page_size)
-		size = page_size;
+	if (type == large)
+		size += sizeof(t_area);
+	else if (type == small)
+		size = (((MAX_SMALL * 100) / page_size) + 1) * page_size;
 	else
-		size = ((size / page_size) + 1) * page_size;
+		size = (((MAX_TINY * 100) / page_size) + 1) * page_size;
 	area = mmap(get_addr_area(type), size,
 			PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, 0, 0);
 	if (area == MAP_FAILED)
 		return (NULL);
-	area->ptr = (char *)(area + 1);
 	area->len = size;
 	area->type = type;
 	area->mem = NULL;

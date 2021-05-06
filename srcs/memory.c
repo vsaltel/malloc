@@ -29,7 +29,7 @@ static t_mem	*set_mem(t_area *area, size_t size, t_mem *bef, t_mem *aft)
 
 	if (!bef)
 	{
-		mem = (t_mem *)area->ptr;
+		mem = (t_mem *)(area + 1);
 		mem->len = size;
 		if (aft)
 			mem->next = aft;
@@ -56,15 +56,15 @@ t_mem	*set_mem_in_area(t_area *area, size_t size)
 	tmp = area->mem;
 	if (!tmp && (size_t)(area->len - sizeof(t_area)) >= size)
 		return (set_mem(area, size, NULL, NULL));
-	else if (tmp && (char *)tmp != area->ptr && \
-		(size_t)((char *)tmp - area->ptr) >= size)
+	else if (tmp && (char *)tmp != (char *)(area + 1) && \
+		(size_t)((char *)tmp - (char *)(area + 1)) >= size)
 		return (set_mem(area, size, NULL, tmp));
 	while (tmp)
 	{
 		if (!tmp->next)
 		{
-			area_end = area->ptr + area->len - sizeof(t_area);
-			if ((size_t)(area_end - ((char *)tmp + tmp->len + 1)) >= size)
+			area_end = (char *)(area + 1) + area->len - sizeof(t_area);
+			if ((size_t)(area_end - ((char *)tmp + tmp->len)) >= size)
 				return (set_mem(area, size, tmp, NULL));
 		}
 		else if (tmp->next && \

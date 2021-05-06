@@ -12,7 +12,7 @@
 
 #include "malloc.h"
 
-t_area	*g_area;
+t_area			*g_area;
 
 static t_mem	*alloc_new_area(size_t size, t_type type)
 {

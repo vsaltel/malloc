@@ -15,15 +15,23 @@
 static int	free_area(t_area *area, t_area *bef)
 {
 	int		ret;
+	t_area	*tmp;
 
 	ret = 0;
 	if (area->mem == NULL)
+		return (ret);
+	tmp = g_area;
+	while (tmp)
 	{
-		if (bef)
-			bef->next = area->next;
-		else
-			g_area = area->next;
-		ret = munmap(area, area->len);
+		if (tmp->type == area->type && tmp != area)
+		{
+			if (bef)
+				bef->next = area->next;
+			else
+				g_area = area->next;
+			ret = munmap(area, area->len);
+		}
+		tmp = tmp->next;
 	}
 	return (ret);
 }

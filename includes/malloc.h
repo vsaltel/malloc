@@ -17,8 +17,8 @@
 #  define NULL __DARWIN_NULL
 # endif
 
-# define MAX_TINY 128
-# define MAX_SMALL 1024
+# define MAX_TINY 256
+# define MAX_SMALL 2048
 # define ADDR_TINY 0xA00000000
 # define ADDR_SMALL 0xB00000000
 # define ADDR_LARGE 0xC00000000
@@ -44,7 +44,6 @@ typedef struct s_mem
 typedef struct s_area
 {
 	t_type			type;
-	char			*ptr;
 	size_t			len;
 	t_mem			*mem;
 	struct s_area	*next;

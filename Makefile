@@ -1,5 +1,5 @@
 CC		=	gcc
-CFLAGS	+=	-Wall -Wextra -Werror
+CFLAGS	+=	-Wall -Wextra #-Werror
 
 ifdef DEBUG
 	CFLAGS += -g3 -fsanitize=address
@@ -14,6 +14,7 @@ SHELL	=	bash
 VALGRIND_ARGS = --leak-check=full --show-leak-kinds=all
 
 NAME 	=	libft_malloc_$(HOSTTYPE).so
+LIBNAME	=	libft_malloc.so
 SRCDIR	=	srcs
 INCDIR	=	includes
 OBJDIR	=	objs
@@ -29,6 +30,7 @@ FILES	=	malloc.c			\
 			utils.c				\
 			show_alloc_mem.c	\
 			show_alloc_mem_ex.c
+
 
 SRCS	=	$(addprefix $(SRCDIR)/, $(FILES))
 OBJS	=	$(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
@@ -57,6 +59,7 @@ all: $(NAME)
 $(NAME): $(OBJS)
 	@echo -e -n "\n${_BLUE}${_BOLD}[Create Shared Library] $(NAME)${_END}"
 	@$(CC) $(CFLAGS) -shared -o $(NAME) $(OBJS)
+	@ln -sf $(NAME) $(LIBNAME)
 	@echo -e "\n${_GREEN}${_BOLD}$(NAME) done.${_END}"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c Makefile
@@ -74,6 +77,7 @@ clean:
 
 fclean: clean
 	@echo -e "${_RED}${_BOLD}Cleaning project...${_END}"
+	@rm -f $(LIBNAME)
 	@rm -f $(NAME)
 	@rm -rf $(NAME).dSYM
 
