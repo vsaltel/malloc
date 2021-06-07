@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 14:34:17 by vsaltel           #+#    #+#             */
-/*   Updated: 2021/04/29 17:37:33 by vsaltel          ###   ########.fr       */
+/*   Updated: 2021/06/07 15:01:00 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	*calloc(size_t count, size_t size)
 
 	pthread_mutex_lock(&g_mutex);
 	total = count * size;
-	if (!total)
+	if (!total || total / count != size)
 		return (NULL);
 	ret = malloc_exec(total);
 	if (ret)

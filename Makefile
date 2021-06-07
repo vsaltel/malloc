@@ -74,7 +74,6 @@ clean:
 	@rm -f $(OBJS)
 	@rm -f $(OBJSD)
 	@rm -f test[0-9]*
-	@rm -f mytest
 	@rm -Rf $(OBJDIR)
 
 fclean: clean

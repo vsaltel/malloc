@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/27 14:35:10 by vsaltel           #+#    #+#             */
-/*   Updated: 2021/04/30 16:36:08 by vsaltel          ###   ########.fr       */
+/*   Updated: 2021/06/07 15:29:54 by user             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	show_alloc_mem(void)
 {
 	unsigned long	total_size;
 
+	pthread_mutex_lock(&g_mutex);
 	total_size = 0;
 	print_str("TINY : ");
 	print_ptr((void *)ADDR_TINY);
@@ -57,4 +58,5 @@ void	show_alloc_mem(void)
 	print_str("Total : ");
 	print_nbr(total_size);
 	print_str(" octets\n");
+	pthread_mutex_unlock(&g_mutex);
 }
