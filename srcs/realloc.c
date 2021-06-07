@@ -33,7 +33,7 @@ static void	*new_alloc(t_mem *mem, size_t size)
 	ret = malloc_exec(size);
 	if (ret)
 	{
-		ft_memcpy(ret, (char *)mem + sizeof(t_mem), size);
+		ft_memcpy(ret, (char *)mem + sizeof(t_mem), mem->len);
 		free_exec(mem);
 		return (ret);
 	}
