@@ -33,17 +33,21 @@ make fclean
 
 After build you get a dynamic library "libft_malloc_$HOSTTYPE.so"
 
-Now you can start any program with the library with those scripts:
+### Replace standard library temporarily
+
+You can start any program with the library with those scripts:
 > The system need to know the library location
 
-### Linux
+- Linux
 ```
 ./run_linux.sh your_program
 ```
-### MacOs
+- MacOs
 ```
 ./run_mac.sh your_program
 ```
+
+### Compile with your project
 
 Instead indicate the location of the library to your system, you can also compile your program directly with the library :
 
