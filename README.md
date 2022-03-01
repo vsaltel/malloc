@@ -1,7 +1,7 @@
 # malloc
 
-My version of the standard malloc C function.
-Allocate memory and return address.
+My version of the standard malloc C library.
+The library is thread safe.
 
 Function included :
 - malloc
@@ -52,4 +52,3 @@ Copy the dynamic library and includes/malloc.h to your C project
 Now you can compile your project with the library
 
 >with gcc add those options : "-L. -lft_malloc"
-
